@@ -312,7 +312,7 @@
       <div>
         <div class="res-block">
           <div class="res-label">Miesięczny wyciek z budżetu:</div>
-          <div class="res-val" id="r_monthly_loss">0 PLN</div>
+          <div class="res-val" id="r_monthly_loss">0 PLN netto</div>
         </div>
         
         <div class="res-block">
@@ -325,13 +325,13 @@
         <div class="res-block">
           <div class="badge-roi" id="r_badge">🌱 Satysfakcjonująca oszczędność</div>
           <div class="res-label">Czysty zysk dla firmy:</div>
-          <div class="res-val-green" id="r_net_savings">0 PLN / msc</div>
+          <div class="res-val-green" id="r_net_savings">0 PLN netto / msc</div>
           
           <div class="progress-bg">
             <div class="progress-bar" id="r_progress"></div>
           </div>
 
-          <div class="res-val-sub" id="r_yearly_savings" style="color: #15803d; font-weight: 700;">tj. 0 PLN rocznie</div>
+          <div class="res-val-sub" id="r_yearly_savings" style="color: #15803d; font-weight: 700;">tj. 0 PLN netto rocznie</div>
         </div>
       </div>
       
@@ -348,7 +348,7 @@
 <footer class="contact-footer" id="kontakt">
   <h3>Czekamy na kontakt 📞</h3>
   <div class="team-title">Zespół <strong>Zaopatrz Się</strong></div>
-  <div class="phones">Mateusz Konik: 574 190 550 | Igor Gałek: 733 984 007</div>
+  <div class="phones">Mateusz Konik 574 190 550 | Igor Gałek 733 984 007</div>
   <div class="email">
     📧 <a href="mailto:biuro.zaopatrzsie@gmail.com">biuro.zaopatrzsie@gmail.com</a>
   </div>
@@ -437,15 +437,15 @@ function calculateB2B() {
 
   const retentionPercent = monthlyLoss > 0 ? Math.min(Math.round((netMonthlySavings / monthlyLoss) * 100), 100) : 0;
 
-  document.getElementById('r_monthly_loss').innerText = monthlyLoss.toLocaleString('pl-PL') + ' PLN';
+  document.getElementById('r_monthly_loss').innerText = monthlyLoss.toLocaleString('pl-PL') + ' PLN netto';
   document.getElementById('r_service_cost').innerText = monthlyServiceNet.toLocaleString('pl-PL') + ' PLN netto / msc';
   
   const progressBar = document.getElementById('r_progress');
   const badge = document.getElementById('r_badge');
 
   if(netMonthlySavings > 0) {
-    document.getElementById('r_net_savings').innerText = netMonthlySavings.toLocaleString('pl-PL') + ' PLN / msc';
-    document.getElementById('r_yearly_savings').innerText = 'tj. ' + netYearlySavings.toLocaleString('pl-PL') + ' PLN rocznie';
+    document.getElementById('r_net_savings').innerText = netMonthlySavings.toLocaleString('pl-PL') + ' PLN netto / msc';
+    document.getElementById('r_yearly_savings').innerText = 'tj. ' + netYearlySavings.toLocaleString('pl-PL') + ' PLN netto rocznie';
     progressBar.style.width = retentionPercent + '%';
     
     if(netMonthlySavings >= 3000) {
@@ -462,7 +462,7 @@ function calculateB2B() {
       badge.style.color = '#854d0e';
     }
   } else {
-    document.getElementById('r_net_savings').innerText = '0 PLN';
+    document.getElementById('r_net_savings').innerText = '0 PLN netto';
     document.getElementById('r_yearly_savings').innerText = 'Ustaw czas lub stawkę wyższą od 0';
     progressBar.style.width = '0%';
     badge.innerText = '⚠️ Brak strat do odzyskania';
