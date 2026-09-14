@@ -3,178 +3,188 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kalkulator B2B</title>
+  <title>Kalkulator kosztu ręcznego zaopatrywania siedziby firmy w produkty pierwszej potrzeby</title>
+  <style>
+    .b2b-calc-container {
+      max-width: 850px;
+      margin: 20px auto;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+      background: #ffffff;
+      overflow: hidden;
+      color: #0f172a;
+    }
+    .b2b-calc-header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #ffffff;
+      padding: 32px 28px;
+      text-align: center;
+      position: relative;
+    }
+    .b2b-calc-header h2 { 
+      margin: 0 0 12px 0; 
+      font-size: 22px; 
+      font-weight: 800; 
+      letter-spacing: -0.02em; 
+      line-height: 1.35;
+    }
+    .b2b-calc-header p { 
+      margin: 0; 
+      font-size: 14px; 
+      color: #94a3b8; 
+      line-height: 1.5;
+    }
+    
+    .b2b-calc-tabs {
+      display: flex;
+      background: #f1f5f9;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 6px;
+      gap: 6px;
+    }
+    .b2b-tab-btn {
+      flex: 1;
+      padding: 12px 16px;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+    .b2b-tab-btn.active {
+      background: #ffffff;
+      color: #2563eb;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    }
+
+    .b2b-calc-body {
+      display: flex;
+      flex-wrap: wrap;
+      padding: 28px;
+      gap: 28px;
+    }
+    .b2b-calc-inputs { flex: 1 1 320px; }
+    
+    .b2b-calc-results {
+      flex: 1 1 280px;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    
+    .calc-group { margin-bottom: 22px; }
+    .calc-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #334155;
+    }
+    .calc-group-val { color: #2563eb; font-weight: 700; background: #eff6ff; padding: 2px 8px; border-radius: 6px; }
+    .calc-group input[type=range] {
+      width: 100%;
+      accent-color: #2563eb;
+      cursor: pointer;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 3px;
+    }
+    
+    .car-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      padding: 12px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    .car-option:hover { border-color: #2563eb; background: #eff6ff; }
+    .car-option input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #2563eb;
+      cursor: pointer;
+    }
+    .car-option-text { font-size: 13px; font-weight: 600; color: #334155; }
+    .car-option-sub { font-size: 11px; color: #64748b; font-weight: normal; }
+
+    .res-block { margin-bottom: 14px; }
+    .res-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 4px; }
+    .res-val { font-size: 22px; font-weight: 800; color: #dc2626; }
+    .res-val-sub { font-size: 13px; color: #475569; margin-top: 2px; }
+    .res-val-green { color: #16a34a; font-size: 24px; font-weight: 800; }
+    
+    .progress-bg {
+      width: 100%;
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 4px;
+      margin: 10px 0 16px 0;
+      overflow: hidden;
+    }
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #16a34a, #22c55e);
+      width: 0%;
+      border-radius: 4px;
+      transition: width 0.4s ease-out;
+    }
+
+    .badge-roi {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      margin-bottom: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .calc-btn {
+      display: block;
+      text-align: center;
+      background: #2563eb;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+      transition: all 0.2s ease;
+    }
+    .calc-btn:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35); }
+    
+    .b2b-calc-footer {
+      background: #f1f5f9;
+      padding: 14px;
+      text-align: center;
+      font-size: 12px;
+      color: #64748b;
+      border-top: 1px solid #e2e8f0;
+    }
+  </style>
 </head>
 <body>
 
-<style>
-  .b2b-calc-container {
-    max-width: 850px;
-    margin: 20px auto;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-    background: #ffffff;
-    overflow: hidden;
-    color: #0f172a;
-  }
-  .b2b-calc-header {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #ffffff;
-    padding: 28px 24px;
-    text-align: center;
-    position: relative;
-  }
-  .b2b-calc-header h2 { margin: 0 0 8px 0; font-size: 24px; font-weight: 800; letter-spacing: -0.02em; }
-  .b2b-calc-header p { margin: 0; font-size: 14px; color: #94a3b8; }
-  
-  .b2b-calc-tabs {
-    display: flex;
-    background: #f1f5f9;
-    border-bottom: 1px solid #e2e8f0;
-    padding: 6px;
-    gap: 6px;
-  }
-  .b2b-tab-btn {
-    flex: 1;
-    padding: 12px 16px;
-    border: none;
-    background: transparent;
-    font-size: 14px;
-    font-weight: 600;
-    color: #64748b;
-    cursor: pointer;
-    border-radius: 10px;
-    transition: all 0.2s ease;
-  }
-  .b2b-tab-btn.active {
-    background: #ffffff;
-    color: #2563eb;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-  }
-
-  .b2b-calc-body {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 28px;
-    gap: 28px;
-  }
-  .b2b-calc-inputs { flex: 1 1 320px; }
-  
-  .b2b-calc-results {
-    flex: 1 1 280px;
-    background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
-  }
-  
-  .calc-group { margin-bottom: 22px; }
-  .calc-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #334155;
-  }
-  .calc-group-val { color: #2563eb; font-weight: 700; background: #eff6ff; padding: 2px 8px; border-radius: 6px; }
-  .calc-group input[type=range] {
-    width: 100%;
-    accent-color: #2563eb;
-    cursor: pointer;
-    height: 6px;
-    background: #e2e8f0;
-    border-radius: 3px;
-  }
-  
-  .car-option {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
-    padding: 12px 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.2s ease;
-  }
-  .car-option:hover { border-color: #2563eb; background: #eff6ff; }
-  .car-option input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #2563eb;
-    cursor: pointer;
-  }
-  .car-option-text { font-size: 13px; font-weight: 600; color: #334155; }
-  .car-option-sub { font-size: 11px; color: #64748b; font-weight: normal; }
-
-  .res-block { margin-bottom: 14px; }
-  .res-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; margin-bottom: 4px; }
-  .res-val { font-size: 22px; font-weight: 800; color: #dc2626; }
-  .res-val-sub { font-size: 13px; color: #475569; margin-top: 2px; }
-  .res-val-green { color: #16a34a; font-size: 24px; font-weight: 800; }
-  
-  .progress-bg {
-    width: 100%;
-    height: 8px;
-    background: #e2e8f0;
-    border-radius: 4px;
-    margin: 10px 0 16px 0;
-    overflow: hidden;
-  }
-  .progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #16a34a, #22c55e);
-    width: 0%;
-    border-radius: 4px;
-    transition: width 0.4s ease-out, background-color 0.3s ease;
-  }
-
-  .badge-roi {
-    display: inline-block;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 4px 10px;
-    border-radius: 20px;
-    margin-bottom: 8px;
-    transition: all 0.3s ease;
-  }
-
-  .calc-btn {
-    display: block;
-    text-align: center;
-    background: #2563eb;
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 700;
-    font-size: 15px;
-    padding: 14px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-    transition: all 0.2s ease;
-  }
-  .calc-btn:hover { background: #1d4ed8; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35); }
-  
-  .b2b-calc-footer {
-    background: #f1f5f9;
-    padding: 14px;
-    text-align: center;
-    font-size: 12px;
-    color: #64748b;
-    border-top: 1px solid #e2e8f0;
-  }
-</style>
-
 <div class="b2b-calc-container">
   <div class="b2b-calc-header">
-    <h2>Kalkulator Oszczędności B2B</h2>
-    <p>Przelicz ile gotówki wycieka z firmy przez ręczne procesy</p>
+    <h2>Kalkulator kosztu ręcznego zaopatrywania siedziby firmy w produkty pierwszej potrzeby</h2>
+    <p>Policz, ile kosztuje Cię samodzielne zaopatrywanie siedziby firmy i sprawdź, ile możesz zaoszczędzić, powierzając je nam.</p>
   </div>
 
   <div class="b2b-calc-tabs">
@@ -185,14 +195,14 @@
   <div class="b2b-calc-body">
     <div class="b2b-calc-inputs">
       
-      <div class="calc-group" id="group_employees" style="display: none;">
-        <label>Liczba pracowników: <span id="v_employees" class="calc-group-val">5</span> osób</label>
-        <input type="range" id="i_employees" min="1" max="50" value="5" oninput="calculateB2B()">
+      <div class="calc-group" id="group_employees">
+        <label id="lbl_employees">Liczba pracowników w firmie: <span id="v_employees" class="calc-group-val">1</span> osób</label>
+        <input type="range" id="i_employees" min="1" max="50" value="1" oninput="calculateB2B()">
       </div>
       
       <div class="calc-group">
-        <label id="lbl_hours">Marnowane godziny / tydzień: <span id="v_hours" class="calc-group-val">5</span> h</label>
-        <input type="range" id="i_hours" min="1" max="20" value="5" oninput="calculateB2B()">
+        <label id="lbl_hours">Czas poświęcany tygodniowo: <span id="v_hours" class="calc-group-val">5</span> h</label>
+        <input type="range" id="i_hours" min="1" max="30" value="5" oninput="calculateB2B()">
       </div>
       
       <div class="calc-group">
@@ -256,25 +266,39 @@ function switchMode(mode, btn) {
   buttons.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  const empGroup = document.getElementById('group_employees');
+  const lblEmployees = document.getElementById('lbl_employees');
   const lblHours = document.getElementById('lbl_hours');
   const lblRate = document.getElementById('lbl_rate');
+  const empInput = document.getElementById('i_employees');
+  const hoursInput = document.getElementById('i_hours');
   const rateInput = document.getElementById('i_rate');
 
   if(mode === 'owner') {
-    empGroup.style.display = 'none';
-    lblHours.innerHTML = 'Marnowane godziny / tydzień: <span id="v_hours" class="calc-group-val">5</span> h';
+    lblEmployees.innerHTML = 'Liczba pracowników objętych usługą: <span id="v_employees" class="calc-group-val">1</span> osób';
+    lblHours.innerHTML = 'Czas poświęcany tygodniowo (Twój): <span id="v_hours" class="calc-group-val">5</span> h';
     lblRate.innerHTML = 'Wartość Twojej 1h pracy: <span id="v_rate" class="calc-group-val">250</span> PLN';
     
+    empInput.value = 1;
+
+    hoursInput.min = "1";
+    hoursInput.max = "30";
+    hoursInput.value = 5;
+
     rateInput.min = "50";
     rateInput.max = "1500";
     rateInput.step = "10";
     rateInput.value = 250; 
   } else {
-    empGroup.style.display = 'block';
-    lblHours.innerHTML = 'Godziny marnowane / tydzień (na osobę): <span id="v_hours" class="calc-group-val">4</span> h';
-    lblRate.innerHTML = 'Koszt 1h pracy pracownika (brutto): <span id="v_rate" class="calc-group-val">80</span> PLN';
+    lblEmployees.innerHTML = 'Liczba pracowników: <span id="v_employees" class="calc-group-val">5</span> osób';
+    lblHours.innerHTML = 'Łącznie godzin w tygodniu (cały zespół): <span id="v_hours" class="calc-group-val">20</span> h';
+    lblRate.innerHTML = 'Średni koszt 1h pracy pracownika (brutto): <span id="v_rate" class="calc-group-val">80</span> PLN';
     
+    empInput.value = 5;
+
+    hoursInput.min = "2";
+    hoursInput.max = "150";
+    hoursInput.value = 20;
+
     rateInput.min = "30";
     rateInput.max = "300";
     rateInput.step = "5";
@@ -285,25 +309,21 @@ function switchMode(mode, btn) {
 }
 
 function calculateB2B() {
-  let employees = 1;
-  
-  if(currentMode === 'employee') {
-    employees = parseInt(document.getElementById('i_employees').value);
-    document.getElementById('v_employees').innerText = employees;
-  }
-
+  const employees = parseInt(document.getElementById('i_employees').value);
   const hours = parseInt(document.getElementById('i_hours').value);
   const rate = parseInt(document.getElementById('i_rate').value);
   const hasCar = document.getElementById('i_car').checked;
 
+  document.getElementById('v_employees').innerText = employees;
   document.getElementById('v_hours').innerText = hours;
   document.getElementById('v_rate').innerText = rate.toLocaleString('pl-PL');
 
   const unitPriceNet = 125;
   const totalCarCost = hasCar ? 150 : 0; 
   
-  const monthlyLoss = (employees * hours * rate * 4) + totalCarCost;
+  const monthlyLoss = (hours * rate * 4) + totalCarCost;
   const monthlyServiceNet = employees * unitPriceNet;
+  
   const netMonthlySavings = monthlyLoss - monthlyServiceNet;
   const netYearlySavings = netMonthlySavings * 12;
 
@@ -320,7 +340,6 @@ function calculateB2B() {
     document.getElementById('r_yearly_savings').innerText = 'tj. ' + netYearlySavings.toLocaleString('pl-PL') + ' PLN rocznie';
     progressBar.style.width = retentionPercent + '%';
     
-    // TRZY STOPNIE OSZCZĘDNOSCI
     if(retentionPercent > 80) {
       badge.innerText = '🔥 Gigantyczny zwrot z inwestycji';
       badge.style.background = '#dcfce7';
@@ -336,7 +355,7 @@ function calculateB2B() {
     }
   } else {
     document.getElementById('r_net_savings').innerText = '0 PLN';
-    document.getElementById('r_yearly_savings').innerText = 'Zwiększ liczbę godzin lub stawkę';
+    document.getElementById('r_yearly_savings').innerText = 'Koszt abonamentu przewyższa oszczędności';
     progressBar.style.width = '0%';
     badge.innerText = '⚠️ Niski zwrot';
     badge.style.background = '#fef2f2';
