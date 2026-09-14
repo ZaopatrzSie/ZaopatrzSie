@@ -197,7 +197,7 @@
       
       <div class="calc-group" id="group_employees" style="display: none;">
         <label id="lbl_employees">Liczba pracowników: <span id="v_employees" class="calc-group-val">5</span> osób</label>
-        <input type="range" id="i_employees" min="1" max="50" value="5" oninput="calculateB2B()">
+        <input type="range" id="i_employees" min="1" max="80" value="5" oninput="calculateB2B()">
       </div>
       
       <div class="calc-group">
@@ -228,7 +228,7 @@
         </div>
         
         <div class="res-block">
-          <div class="res-label">Inwestycja w naszą usługę (48%):</div>
+          <div class="res-label">Inwestycja w naszą usługę:</div>
           <div class="res-val-sub" id="r_service_cost">0 PLN netto / msc</div>
         </div>
         
@@ -236,7 +236,7 @@
         
         <div class="res-block">
           <div class="badge-roi" id="r_badge">⚡ Wysoka oszczędność</div>
-          <div class="res-label">Czysty zysk dla firmy (52%):</div>
+          <div class="res-label">Czysty zysk dla firmy:</div>
           <div class="res-val-green" id="r_net_savings">0 PLN / msc</div>
           
           <div class="progress-bg">
@@ -252,7 +252,7 @@
   </div>
   
   <div class="b2b-calc-footer">
-    🔒 Obliczenia są prywatne i wykonywane w przeglądarce. Koszt usługi: 48% wartości odzyskanych strat.
+    🔒 Obliczenia są prywatne i wykonywane w przeglądarce.
   </div>
 </div>
 
@@ -290,16 +290,18 @@ function switchMode(mode, btn) {
   } else {
     groupEmployees.style.display = 'block';
     lblEmployees.innerHTML = 'Liczba pracowników: <span id="v_employees" class="calc-group-val">5</span> osób';
-    lblHours.innerHTML = 'Łącznie godzin w tygodniu (cały zespół): <span id="v_hours" class="calc-group-val">20</span> h';
+    lblHours.innerHTML = 'Czas poświęcany przez cały zespół tygodniowo: <span id="v_hours" class="calc-group-val">20</span> h';
     lblRate.innerHTML = 'Średni koszt 1h pracy pracownika (brutto): <span id="v_rate" class="calc-group-val">80</span> PLN';
     
+    empInput.min = "1";
+    empInput.max = "80";
     empInput.value = 5;
 
-    hoursInput.min = "2";
-    hoursInput.max = "150";
+    hoursInput.min = "3";
+    hoursInput.max = "120";
     hoursInput.value = 20;
 
-    rateInput.min = "30";
+    rateInput.min = "50";
     rateInput.max = "300";
     rateInput.step = "5";
     rateInput.value = 80; 
@@ -323,10 +325,10 @@ function calculateB2B() {
   // Całkowita strata firmy w miesiącu
   const monthlyLoss = (hours * rate * 4) + totalCarCost;
   
-  // Koszt usługi = 48% wartości strat
+  // Koszt usługi (48% z wyliczenia wewnętrznego)
   const monthlyServiceNet = Math.round(monthlyLoss * 0.48);
   
-  // Czysty zysk dla firmy = pozostałe 52%
+  // Czysty zysk dla firmy (pozostałe 52%)
   const netMonthlySavings = monthlyLoss - monthlyServiceNet;
   const netYearlySavings = netMonthlySavings * 12;
 
