@@ -111,6 +111,7 @@
       cursor: pointer;
       user-select: none;
       transition: all 0.2s ease;
+      margin-bottom: 12px;
     }
     .car-option:hover { border-color: #2563eb; background: #eff6ff; }
     .car-option input[type="checkbox"] {
@@ -195,8 +196,8 @@
   <div class="b2b-calc-body">
     <div class="b2b-calc-inputs">
       
-      <div class="calc-group" id="group_employees" style="display: none;">
-        <label id="lbl_employees">Liczba pracowników: <span id="v_employees" class="calc-group-val">5</span> osób</label>
+      <div class="calc-group" id="group_employees">
+        <label id="lbl_employees">Liczba pracowników w firmie: <span id="v_employees" class="calc-group-val">5</span> osób</label>
         <input type="range" id="i_employees" min="1" max="80" value="5" oninput="calculateB2B()">
       </div>
       
@@ -218,6 +219,14 @@
         </div>
       </label>
 
+      <label class="car-option" for="i_margin">
+        <input type="checkbox" id="i_margin" onchange="calculateB2B()">
+        <div>
+          <div class="car-option-text">🛒 Marża dystrybucyjna na produktach</div>
+          <div class="car-option-sub">Narzut sklepów stacjonarnych (+19 zł netto / msc per pracownik)</div>
+        </div>
+      </label>
+
     </div>
     
     <div class="b2b-calc-results">
@@ -235,7 +244,7 @@
         <hr style="border: 0; border-top: 1px solid #cbd5e1; margin: 14px 0;">
         
         <div class="res-block">
-          <div class="badge-roi" id="r_badge">⚡ Wysoka oszczędność</div>
+          <div class="badge-roi" id="r_badge">🌱 Satysfakcjonująca oszczędność</div>
           <div class="res-label">Czysty zysk dla firmy:</div>
           <div class="res-val-green" id="r_net_savings">0 PLN / msc</div>
           
@@ -266,7 +275,6 @@ function switchMode(mode, btn) {
   buttons.forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 
-  const groupEmployees = document.getElementById('group_employees');
   const lblEmployees = document.getElementById('lbl_employees');
   const lblHours = document.getElementById('lbl_hours');
   const lblRate = document.getElementById('lbl_rate');
@@ -275,10 +283,13 @@ function switchMode(mode, btn) {
   const rateInput = document.getElementById('i_rate');
 
   if(mode === 'owner') {
-    groupEmployees.style.display = 'none';
+    lblEmployees.innerHTML = 'Liczba pracowników w firmie: <span id="v_employees" class="calc-group-val">5</span> osób';
     lblHours.innerHTML = 'Czas poświęcany tygodniowo (Twój): <span id="v_hours" class="calc-group-val">5</span> h';
     lblRate.innerHTML = 'Wartość Twojej 1h pracy: <span id="v_rate" class="calc-group-val">250</span> PLN';
     
+    empInput.min = "1";
+    empInput.max = "80";
+
     hoursInput.min = "1";
     hoursInput.max = "30";
     hoursInput.value = 5;
@@ -288,14 +299,12 @@ function switchMode(mode, btn) {
     rateInput.step = "10";
     rateInput.value = 250; 
   } else {
-    groupEmployees.style.display = 'block';
     lblEmployees.innerHTML = 'Liczba pracowników: <span id="v_employees" class="calc-group-val">5</span> osób';
     lblHours.innerHTML = 'Czas poświęcany przez cały zespół tygodniowo: <span id="v_hours" class="calc-group-val">20</span> h';
     lblRate.innerHTML = 'Średni koszt 1h pracy pracownika (brutto): <span id="v_rate" class="calc-group-val">80</span> PLN';
     
     empInput.min = "1";
     empInput.max = "80";
-    empInput.value = 5;
 
     hoursInput.min = "3";
     hoursInput.max = "120";
@@ -315,15 +324,17 @@ function calculateB2B() {
   const hours = parseInt(document.getElementById('i_hours').value);
   const rate = parseInt(document.getElementById('i_rate').value);
   const hasCar = document.getElementById('i_car').checked;
+  const hasMargin = document.getElementById('i_margin').checked;
 
   document.getElementById('v_employees').innerText = employees;
   document.getElementById('v_hours').innerText = hours;
   document.getElementById('v_rate').innerText = rate.toLocaleString('pl-PL');
 
   const totalCarCost = hasCar ? 150 : 0; 
+  const totalMarginCost = hasMargin ? (employees * 19) : 0;
   
   // Całkowita strata firmy w miesiącu
-  const monthlyLoss = (hours * rate * 4) + totalCarCost;
+  const monthlyLoss = (hours * rate * 4) + totalCarCost + totalMarginCost;
   
   // Koszt usługi (48% z wyliczenia wewnętrznego)
   const monthlyServiceNet = Math.round(monthlyLoss * 0.48);
@@ -345,11 +356,11 @@ function calculateB2B() {
     document.getElementById('r_yearly_savings').innerText = 'tj. ' + netYearlySavings.toLocaleString('pl-PL') + ' PLN rocznie';
     progressBar.style.width = retentionPercent + '%';
     
-    if(retentionPercent > 80) {
+    if(netMonthlySavings >= 3000) {
       badge.innerText = '🔥 Gigantyczny zwrot z inwestycji';
       badge.style.background = '#dcfce7';
       badge.style.color = '#15803d';
-    } else if(retentionPercent >= 50) {
+    } else if(netMonthlySavings >= 1000) {
       badge.innerText = '⚡ Wysoka oszczędność';
       badge.style.background = '#e0f2fe';
       badge.style.color = '#0369a1';
